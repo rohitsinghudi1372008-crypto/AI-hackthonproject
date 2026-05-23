@@ -1,0 +1,57 @@
+{
+  "service": "InferenceService",
+  "environment": "production",
+  "metric_name": "cpu_utilization_percent",
+  "timestamp_range": {
+    "start": "2026-05-23T05:00:00Z",
+    "end": "2026-05-23T07:00:00Z"
+  },
+  "alert": {
+    "id": "alert-cpu-spike-001",
+    "severity": "P2",
+    "triggered_at": "2026-05-23T05:42:00Z",
+    "threshold": 85,
+    "observed_peak": 98.7,
+    "duration_minutes": 78,
+    "message": "CPU utilization sustained above 85% for 78 minutes on inference-worker pods"
+  },
+  "timeseries": [
+    {"timestamp": "2026-05-23T05:00:00Z", "cpu_percent": 42.1, "pod_count": 8},
+    {"timestamp": "2026-05-23T05:10:00Z", "cpu_percent": 44.3, "pod_count": 8},
+    {"timestamp": "2026-05-23T05:20:00Z", "cpu_percent": 46.8, "pod_count": 8},
+    {"timestamp": "2026-05-23T05:30:00Z", "cpu_percent": 67.2, "pod_count": 8},
+    {"timestamp": "2026-05-23T05:40:00Z", "cpu_percent": 89.4, "pod_count": 8},
+    {"timestamp": "2026-05-23T05:50:00Z", "cpu_percent": 95.1, "pod_count": 8},
+    {"timestamp": "2026-05-23T06:00:00Z", "cpu_percent": 98.7, "pod_count": 8},
+    {"timestamp": "2026-05-23T06:10:00Z", "cpu_percent": 97.3, "pod_count": 8},
+    {"timestamp": "2026-05-23T06:20:00Z", "cpu_percent": 96.8, "pod_count": 8},
+    {"timestamp": "2026-05-23T06:30:00Z", "cpu_percent": 94.2, "pod_count": 8},
+    {"timestamp": "2026-05-23T06:40:00Z", "cpu_percent": 91.0, "pod_count": 8},
+    {"timestamp": "2026-05-23T06:50:00Z", "cpu_percent": 88.5, "pod_count": 8},
+    {"timestamp": "2026-05-23T07:00:00Z", "cpu_percent": 85.2, "pod_count": 8}
+  ],
+  "correlating_events": [
+    {
+      "timestamp": "2026-05-23T05:28:00Z",
+      "event_type": "deployment",
+      "description": "inference-service v2.4.1 deployed with new beam-search algorithm (no batch size cap)",
+      "commit_sha": "b72e9f1a"
+    },
+    {
+      "timestamp": "2026-05-23T05:35:00Z",
+      "event_type": "traffic_pattern",
+      "description": "Request concurrency increased from avg 120 to 850 rps — no HPA trigger due to misconfigured minReplicas"
+    }
+  ],
+  "top_cpu_consumers": [
+    {"process": "python3 inference_worker.py", "cpu_percent": 87.2},
+    {"process": "torch_model_server", "cpu_percent": 9.1},
+    {"process": "prometheus_exporter", "cpu_percent": 1.4}
+  ],
+  "resource_limits": {
+    "cpu_request": "2000m",
+    "cpu_limit": "4000m",
+    "memory_request": "8Gi",
+    "memory_limit": "16Gi"
+  }
+}

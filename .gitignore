@@ -1,0 +1,31 @@
+# Node
+node_modules/
+dist/
+.env
+.env.local
+# Note: .env.production is tracked (contains placeholder URL, not secrets)
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.gemini/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build
+*.log
+
+# Test artifacts
+qa_screenshot.js

@@ -1,0 +1,75 @@
+{
+  "repository": "payment-gateway-service",
+  "branch": "main",
+  "commits": [
+    {
+      "sha": "a31f2c8e",
+      "short_sha": "a31f2c8",
+      "author": "dev-autobot@company.com",
+      "timestamp": "2026-05-23T06:28:00Z",
+      "message": "perf: reduce connection pool overhead for cost optimization",
+      "files_changed": ["src/config/database.properties", "src/config/application.yml"],
+      "diff": {
+        "database.properties": {
+          "before": "db.pool.maxSize=50\ndb.pool.minIdle=10\ndb.pool.connectionTimeout=5000",
+          "after": "db.pool.maxSize=5\ndb.pool.minIdle=1\ndb.pool.connectionTimeout=30000",
+          "analysis": "CRITICAL: Pool size reduced from 50 to 5 (90% reduction). Connection timeout increased from 5s to 30s causing cascading timeouts."
+        }
+      },
+      "ci_status": "passed",
+      "deployment_timestamp": "2026-05-23T06:30:00Z",
+      "reviewed_by": null,
+      "flags": ["no-peer-review", "direct-to-main", "config-change"]
+    },
+    {
+      "sha": "b72e9f1a",
+      "short_sha": "b72e9f1",
+      "author": "ml-eng@company.com",
+      "timestamp": "2026-05-23T05:25:00Z",
+      "message": "feat: upgrade beam search to v3 with unbounded parallel workers",
+      "files_changed": ["src/inference/beam_search.py", "src/inference/worker_config.py"],
+      "diff": {
+        "worker_config.py": {
+          "before": "MAX_BATCH_SIZE = 32\nMAX_CONCURRENT_REQUESTS = 10",
+          "after": "MAX_BATCH_SIZE = None  # removed cap\nMAX_CONCURRENT_REQUESTS = None  # auto-scale",
+          "analysis": "WARNING: Removed all concurrency limits. Under high traffic this saturates CPU cores."
+        }
+      },
+      "ci_status": "passed",
+      "deployment_timestamp": "2026-05-23T05:28:00Z",
+      "reviewed_by": "ml-lead@company.com",
+      "flags": ["breaking-change", "no-load-test"]
+    },
+    {
+      "sha": "c89d4f2b",
+      "short_sha": "c89d4f2",
+      "author": "platform-eng@company.com",
+      "timestamp": "2026-05-23T04:10:00Z",
+      "message": "chore: update HPA minReplicas to 8 for cost savings",
+      "files_changed": ["k8s/inference-service-hpa.yaml"],
+      "diff": {
+        "inference-service-hpa.yaml": {
+          "before": "minReplicas: 12\nmaxReplicas: 50\ntargetCPUUtilizationPercentage: 70",
+          "after": "minReplicas: 8\nmaxReplicas: 8\ntargetCPUUtilizationPercentage: 70",
+          "analysis": "WARNING: maxReplicas set equal to minReplicas — HPA cannot scale up during load spikes."
+        }
+      },
+      "ci_status": "passed",
+      "deployment_timestamp": "2026-05-23T04:15:00Z",
+      "reviewed_by": "platform-lead@company.com",
+      "flags": ["hpa-change", "scaling-impacted"]
+    },
+    {
+      "sha": "d04a1e3c",
+      "short_sha": "d04a1e3",
+      "author": "backend-eng@company.com",
+      "timestamp": "2026-05-22T18:30:00Z",
+      "message": "refactor: migrate redis client to async connection pool",
+      "files_changed": ["src/cache/redis_client.py"],
+      "ci_status": "passed",
+      "deployment_timestamp": "2026-05-22T18:45:00Z",
+      "reviewed_by": "backend-lead@company.com",
+      "flags": []
+    }
+  ]
+}
